@@ -10,10 +10,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GDSharp {
+    public class Throwaway : Label {
+        public Throwaway() {
+
+        }
+    }
+
     public partial class Main : Form {
-        private FlowLayoutPanel MainPanel;
+        private Panel MainPanel;
 
         public Main() {
+
             InitializeComponent();
         }
 
@@ -22,41 +29,80 @@ namespace GDSharp {
             public string Text { get; set; }
         }
 
+        List<FlowLayoutPanel> TabsList = new List<FlowLayoutPanel> {
+            new Pages.Home(),
+            new Pages.Export()
+        };
+
+        private Panel Tabs;
+        private Panel Pages;
+
         private void InitializeComponent() {
-            Text = "GDSharp";
+            Text = $"{Settings.AppName} {Settings.VersionString}";
             ClientSize = new Size(Dimensions.Width, Dimensions.Height);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            MinimizeBox = false;
             StartPosition = FormStartPosition.CenterScreen;
+            BackColor = Style.Color(Style.Colors.Background);
+            Click += Nullify;
 
-            MainPanel = new FlowLayoutPanel();
+            MainPanel = new Panel();
+
+            Tabs = new Panel();
+
+            Tabs.Location = new Point(0,0);
+            Tabs.Size = new Size(Dimensions.Width, Style.TabHeight);
+            Tabs.BackColor = Color.FromArgb(0,0,0,0);
+            Tabs.ForeColor = Style.Color(Style.Colors.Text);
+
+            Pages = new Panel();
+
+            Pages.Location = new Point(0, Style.TabHeight);
+            Pages.Size = new Size(Dimensions.Width, Dimensions.Height - Style.TabHeight);
+            Pages.BackColor = Style.Color(Style.Colors.Dark);
+
+            foreach (var i in TabsList) {
+                var Tab = new Elements.Tab();
+                Tab.Text = i.Name;
+                int offset = 0;
+                foreach (Control p in Tabs.Controls) {
+                    offset += p.Size.Width + Style.Margin;
+                }
+                if (offset == 0) Tab.Selected = true;
+                Tab.Click += TabSelect;
+                Tab.Click += (Object sender, EventArgs e) => Tab.Selected = true;
+                Tab.Click += (Object sender, EventArgs e) => i.Show();
+                Tab.Location = new Point(offset, 0);
+                Tabs.Controls.Add(Tab);
+                Pages.Controls.Add(i);
+            }
 
             GDShare GDShare = new GDShare();
 
-            var text = new Label();
-            text.Text = "Welcome to GDSharp!";
-            text.Font = Style.GetHeaderFont();
-            text.AutoSize = true;
-            text.Width = 300;
-            text.ForeColor = Style.Color(Style.Colors.Text);
+            Icon = new Icon("resources/icon.ico");
 
-            var button = new Elements.GButton();
-            button.Text = "Export";
-            button.Click += new EventHandler(OnClick);
+            MainPanel.Size = new Size(Dimensions.Width, Dimensions.Height);
+            MainPanel.Padding = new Padding(0);
+            MainPanel.Margin = new Padding(0);
+            MainPanel.Controls.Add(Tabs);
+            MainPanel.Controls.Add(Pages);
 
-            MainPanel.Controls.Add(text);
-            MainPanel.Controls.Add(button);
-            MainPanel.Width = Dimensions.Width;
-            MainPanel.Height = Dimensions.Height;
-            MainPanel.BackColor = Style.Color(Style.Colors.Background);
             Controls.Add(MainPanel);
 
             CenterToScreen();
         }
 
-        void OnClick(object sender, EventArgs e) {
-            Console.WriteLine("what do i look like, a blue ball?");
+        void Nullify(Object sender, EventArgs e) {
+            ActiveControl = null;
+        }
+        
+        void TabSelect(Object sender, EventArgs e) {
+            foreach (Elements.Tab p in Tabs.Controls) {
+                p.Selected = false;
+            }
+            foreach (Pages.Tab p in Pages.Controls) {
+                p.Hide();
+            }
         }
     }
 }

@@ -10,6 +10,13 @@ namespace GDSharp {
         public static int Width = 440;
         public static int Height = 550;
     }
+
+    public class Settings {
+        public static int VersionNum = 10;
+        public static string VersionString = "v0.1.0";
+        public static string AppName = "GDSharp";
+    }
+
     public class Program {
         [DllImport( "kernel32.dll" )]
         static extern bool AttachConsole( int dwProcessId );
