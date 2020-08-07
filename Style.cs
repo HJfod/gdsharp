@@ -26,16 +26,19 @@ namespace GDSharp {
             public static string Head = "Montserrat.ttf";
         };
 
+        private static readonly PrivateFontCollection _pfc = new PrivateFontCollection();
+
+        public static void InitializeFonts() {
+            _pfc.AddFontFile($"D:\\github\\gdsharp\\resources\\{Fonts.Main}");
+            _pfc.AddFontFile($"D:\\github\\gdsharp\\resources\\{Fonts.Head}");
+        }
+
         public static Font GetFont() {
-            PrivateFontCollection fontCollection = new PrivateFontCollection();
-            fontCollection.AddFontFile($"resources\\{Fonts.Main}");
-            return new Font(fontCollection.Families[0], Style.TextSize);
+            return new Font(_pfc.Families[1], Style.TextSize);
         }
 
         public static Font GetHeaderFont() {
-            PrivateFontCollection fontCollection = new PrivateFontCollection();
-            fontCollection.AddFontFile($"resources\\{Fonts.Head}");
-            return new Font(fontCollection.Families[0], Style.TextSizeHeader);
+            return new Font(_pfc.Families[0], Style.TextSizeHeader);
         }
 
         public class Colors : DefaultStyle {

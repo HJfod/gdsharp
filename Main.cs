@@ -10,17 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GDSharp {
-    public class Throwaway : Label {
-        public Throwaway() {
-
-        }
-    }
-
     public partial class Main : Form {
         private Panel MainPanel;
 
         public Main() {
-
             InitializeComponent();
         }
 
@@ -31,7 +24,10 @@ namespace GDSharp {
 
         List<FlowLayoutPanel> TabsList = new List<FlowLayoutPanel> {
             new Pages.Home(),
-            new Pages.Export()
+            new Pages.Backups(),
+            new Pages.Export(),
+            new Pages.Import(),
+            new Pages.Settings()
         };
 
         private Panel Tabs;

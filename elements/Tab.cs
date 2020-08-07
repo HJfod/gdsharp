@@ -61,7 +61,7 @@ namespace GDSharp {
                 MouseEnter += HoverIn;
                 MouseLeave += HoverOut;
                 Height = Style.TabHeight;
-                SetStyle(ControlStyles.Selectable, false);
+                TabStop = false;
 
                 this.hoverTimer = new Timer();
                 this.hoverTimer.Interval = Style.TimerFPS;
@@ -70,16 +70,11 @@ namespace GDSharp {
                 this.Selected = false;
             }
 
-            protected override bool ShowFocusCues {
-                get {
-                    return false;
-                }
-            }
-
             protected override void OnPaint(PaintEventArgs e) {
                 base.OnPaint(e);
                 using (Brush b = new SolidBrush(CurrentBGColor)) {
                     TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
+                    e.Graphics.FillRectangle(new SolidBrush(Style.Color(Style.Colors.Background)), this.ClientRectangle);
                     e.Graphics.FillPath(b, Shapes.RoundedRect(this.ClientRectangle, new int[4] { Style.CornerSize, Style.CornerSize, 0, 0 } ));
                     Color TColor = this.Selected ? this.ForeColor : Style.Color(Style.Colors.TextDark);
                     TextRenderer.DrawText(e.Graphics, this.Text, this.Font, this.ClientRectangle, TColor, flags);

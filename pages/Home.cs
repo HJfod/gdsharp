@@ -1,22 +1,7 @@
-using System;
 using System.Windows.Forms;
-using System.Drawing;
 
 namespace GDSharp {
     namespace Pages {
-        public partial class Tab : FlowLayoutPanel {
-            public Tab() {
-                InitializeComponent();
-            }
-
-            private void InitializeComponent() {
-                AutoSize = true;
-                BackColor = Color.FromArgb(0,0,0,0);
-                Padding = Style.BigPadding;
-                Margin = Style.BigPadding;
-            }
-        }
-
         public partial class Home : Tab {
             public Home() {
                 InitializeComponent();
@@ -28,7 +13,12 @@ namespace GDSharp {
                 var text = new Elements.Header();
                 text.Text = "Welcome to GDSharp!";
 
+                var text2 = new Elements.TextDark();
+                text2.Text = "Log in";
+
                 Controls.Add(text);
+                Controls.Add(new Elements.NewLine());
+                Controls.Add(text2);
             }
         }
     }

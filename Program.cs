@@ -24,6 +24,8 @@ namespace GDSharp {
         [STAThread]
         static void Main() {
             AttachConsole( -1 );
+            
+            Style.InitializeFonts();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
