@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "9/JSEpV7YhiZx6Ik3UW3+O0QuvwzzFUedQAsmdYM89Tgmn1UtZHeVNUeAEPMUwfkgCmGzJA9uN/2Lpq3IQ3JAg==",
+  "dgSpecHash": "aJfkYvmlCZKMUHS22MOLXKgc6TPnvNRU9Jt0KZGddH0GH4um4t0scbXjMyNQBR/h8VLujUojo6GG8tC4nw/Q3A==",
   "success": true,
   "projectFilePath": "D:\\github\\gdsharp\\proton.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\HJ\\.nuget\\packages\\sharpziplib\\1.2.0\\sharpziplib.1.2.0.nupkg.sha512"
+  ],
   "logs": []
 }

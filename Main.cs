@@ -13,7 +13,12 @@ namespace GDSharp {
     public partial class Main : Form {
         private Panel MainPanel;
 
+        public static GDShare GDShare = new GDShare();
+
         public Main() {
+            string data = GDShare.DecodeCCFile(GDShare.GetCCPath("GameManager"));
+            Console.WriteLine(data.Substring(0, 100));
+
             InitializeComponent();
         }
 
@@ -72,8 +77,6 @@ namespace GDSharp {
                 Tabs.Controls.Add(Tab);
                 Pages.Controls.Add(i);
             }
-
-            GDShare GDShare = new GDShare();
 
             Icon = new Icon("resources/icon.ico");
 

@@ -29,8 +29,8 @@ namespace GDSharp {
         private static readonly PrivateFontCollection _pfc = new PrivateFontCollection();
 
         public static void InitializeFonts() {
-            _pfc.AddFontFile($"D:\\github\\gdsharp\\resources\\{Fonts.Main}");
-            _pfc.AddFontFile($"D:\\github\\gdsharp\\resources\\{Fonts.Head}");
+            _pfc.AddFontFile($"resources\\{Fonts.Main}");
+            _pfc.AddFontFile($"resources\\{Fonts.Head}");
         }
 
         public static Font GetFont() {
