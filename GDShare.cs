@@ -2,41 +2,39 @@ using System;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+using System.IO.Compression;
+using System.Linq;
 
 namespace GDSharp {
     public class GDShare {
         private static string _GDSaveData;
 
-        private static string DecryptXOR(string istr, string ikey) {
-            byte[] str = Encoding.UTF8.GetBytes(istr);
-            byte[] key = Encoding.UTF8.GetBytes(ikey);
-
-            byte[] xor = new byte[str.Length];
+        private static string DecryptXOR(string str, int key) {
+            byte[] xor = Encoding.UTF8.GetBytes(str);
             for (int i = 0; i < str.Length; i++) {
-                xor[i] = (byte)(str[i] ^ key[i % key.Length]);
+                xor[i] = (byte)(xor[i] ^ key);
             }
             return Encoding.UTF8.GetString(xor);
         }
 
-        private static string DecryptBase64(string istr) {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(istr.Replace("-", "+").Replace("_", "/")));
+        private static Byte[] DecryptBase64(string istr) {
+            return Convert.FromBase64String(istr);
         }
 
-        private static string DecompressZLib(string idata) {
-            byte[] data = Encoding.UTF8.GetBytes(idata);
+        private static string DecompressZLib(Byte[] data) {
+            // i would once again like to thank https://github.com/gd-edit/GDAPI for being open source
+            MemoryStream compressedStream = new MemoryStream(data);
+            MemoryStream resultStream = new MemoryStream();
+            GZipStream zipStream = new GZipStream(compressedStream, CompressionMode.Decompress);
 
-            var outputStream = new MemoryStream();
-            using (var compressedStream = new MemoryStream(data))
-            using (var inputStream = new InflaterInputStream(compressedStream)) {
-                inputStream.CopyTo(outputStream);
-                outputStream.Position = 0;
-                return Encoding.UTF8.GetString(outputStream.ToArray());
-            }
+            zipStream.CopyTo(resultStream);
+            return Encoding.UTF8.GetString(resultStream.ToArray());
         }
 
         public static string DecodeCCFile(string path) {
             string data;
+
+            Console.WriteLine($"Decoding {path.Split("\\").Last()}");
 
             Stopwatch watch = new Stopwatch();
 
@@ -50,19 +48,22 @@ namespace GDSharp {
 
                 watch.Reset();
                 watch.Start();
-                data = DecryptXOR(file, "11");
+                data = DecryptXOR(file, 11);
+                data = data.Replace("-", "+").Replace("_", "/").Replace("\0", string.Empty);
+                int remaining = data.Length % 4;
+                if (remaining > 0) data += new string('=', 4 - remaining);  // thank you to GDEdit / GDAPI for being open source
                 watch.Stop();
                 Console.WriteLine($"Decrypting XOR took {watch.ElapsedMilliseconds}ms");
 
                 watch.Reset();
                 watch.Start();
-                data = DecryptBase64(data);
+                Byte[] gzib64 = DecryptBase64(data);
                 watch.Stop();
                 Console.WriteLine($"Decrypting Base64 took {watch.ElapsedMilliseconds}ms");
 
                 watch.Reset();
                 watch.Start();
-                data = DecompressZLib(data);
+                data = DecompressZLib(gzib64);
                 watch.Stop();
                 Console.WriteLine($"Decompressing ZLib took {watch.ElapsedMilliseconds}ms");
 

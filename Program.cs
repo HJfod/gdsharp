@@ -24,6 +24,8 @@ namespace GDSharp {
         [STAThread]
         static void Main() {
             AttachConsole( -1 );
+
+            Console.WriteLine("Booting up...");
             
             Style.InitializeFonts();
 
