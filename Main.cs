@@ -60,7 +60,7 @@ namespace GDSharp {
             Pages.Size = new Size(Dimensions.Width, Dimensions.Height - Style.TabHeight);
             Pages.BackColor = Style.Color(Style.Colors.Dark);
 
-            foreach (var i in new List<FlowLayoutPanel> {
+            foreach (var i in new List<Panel> {
                 new Pages.Home(),
                 new Pages.Backups(),
                 new Pages.Export(),

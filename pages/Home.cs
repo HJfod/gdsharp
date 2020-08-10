@@ -17,6 +17,9 @@ namespace GDSharp {
 
                 dynamic UserInfo = GDShare.GetGDUserInfo(null);
 
+                Elements.Container C = new Elements.Container();
+                C.Location = new Point(0,0);
+
                 var WelcomeText = new Elements.Header();
                 WelcomeText.Text = "Welcome to GDSharp!";
 
@@ -41,17 +44,19 @@ namespace GDSharp {
 
                 var VersionString = new Elements.TextDark();
                 VersionString.Text = $"{GDSharp.Settings.AppName} {GDSharp.Settings.VersionString} ({GDSharp.Settings.VersionNum}) {GDSharp.Settings.BuildString}";
-                VersionString.Dock = DockStyle.Bottom;
-                VersionString.Anchor = AnchorStyles.Bottom;
+                VersionString.Location = new Point(Style.PaddingSize, Dimensions.Height - Style.PaddingSize - Style.TabHeight - VersionString.Height);
 
-                Controls.Add(WelcomeText);
-                Controls.Add(new Elements.NewLine());
-                Controls.Add(UserName);
-                Controls.Add(new Elements.NewLineBig());
-                Controls.Add(StatsShow);
-                Controls.Add(new Elements.NewLine());
-                Controls.Add(UserStats);
+                C.Controls.Add(WelcomeText);
+                C.Controls.Add(new Elements.NewLine());
+                C.Controls.Add(UserName);
+                C.Controls.Add(new Elements.NewLineBig());
+                C.Controls.Add(StatsShow);
+                C.Controls.Add(new Elements.NewLine());
+                C.Controls.Add(UserStats);
+                Controls.Add(C);
                 Controls.Add(VersionString);
+
+                VersionString.BringToFront();
             }
         }
     }
