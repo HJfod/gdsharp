@@ -15,9 +15,15 @@ namespace GDSharp {
 
         public static GDShare GDShare = new GDShare();
 
+        private static void ShowLoadingMessage(string msg, int prog) {
+            Program.BootupSplash.Progress.Text = msg;
+            Program.BootupSplash.SetProgress((float)prog);
+        }
+
         public Main() {
-            string data = GDShare.DecodeCCFile(GDShare.GetCCPath("GameManager"));
-            Console.WriteLine(data.Substring(0, 100));
+            string data = GDShare.DecodeCCFile(GDShare.GetCCPath("GameManager"), ShowLoadingMessage);
+            string LLdata = GDShare.DecodeCCFile(GDShare.GetCCPath("LocalLevels"), ShowLoadingMessage);
+            Console.WriteLine("+ Decrypted GD data");
 
             InitializeComponent();
         }
@@ -26,14 +32,6 @@ namespace GDSharp {
             public int ID { get; set; }
             public string Text { get; set; }
         }
-
-        List<FlowLayoutPanel> TabsList = new List<FlowLayoutPanel> {
-            new Pages.Home(),
-            new Pages.Backups(),
-            new Pages.Export(),
-            new Pages.Import(),
-            new Pages.Settings()
-        };
 
         private Panel Tabs;
         private Panel Pages;
@@ -57,12 +55,18 @@ namespace GDSharp {
             Tabs.ForeColor = Style.Color(Style.Colors.Text);
 
             Pages = new Panel();
-
+            
             Pages.Location = new Point(0, Style.TabHeight);
             Pages.Size = new Size(Dimensions.Width, Dimensions.Height - Style.TabHeight);
             Pages.BackColor = Style.Color(Style.Colors.Dark);
 
-            foreach (var i in TabsList) {
+            foreach (var i in new List<FlowLayoutPanel> {
+                new Pages.Home(),
+                new Pages.Backups(),
+                new Pages.Export(),
+                new Pages.Import(),
+                new Pages.Settings()
+            }) {
                 var Tab = new Elements.Tab();
                 Tab.Text = i.Name;
                 int offset = 0;
@@ -89,6 +93,16 @@ namespace GDSharp {
             Controls.Add(MainPanel);
 
             CenterToScreen();
+
+            Program.BootupSplash.Close();
+
+            Console.WriteLine("+ Splash Closed");
+            
+            Show();
+            Focus();
+            Activate();
+
+            Console.WriteLine("+ App succesfully booted up!");
         }
 
         void Nullify(Object sender, EventArgs e) {

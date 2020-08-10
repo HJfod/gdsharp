@@ -14,6 +14,7 @@ namespace GDSharp {
                 BackColor = Color.FromArgb(0,0,0,0);
                 Padding = Style.BigPadding;
                 Margin = Style.BigPadding;
+                FlowDirection = FlowDirection.TopDown;
             }
         }
     }

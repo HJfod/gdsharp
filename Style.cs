@@ -33,17 +33,15 @@ namespace GDSharp {
             _pfc.AddFontFile($"resources\\{Fonts.Head}");
         }
 
-        public static Font GetFont() {
-            return new Font(_pfc.Families[1], Style.TextSize);
+        public static Font GetFont(int CustomSize = 0) {
+            return new Font(_pfc.Families[1], CustomSize > 0 ? CustomSize : Style.TextSize);
         }
 
-        public static Font GetHeaderFont() {
-            return new Font(_pfc.Families[0], Style.TextSizeHeader);
+        public static Font GetHeaderFont(int CustomSize = 0) {
+            return new Font(_pfc.Families[0], CustomSize > 0 ? CustomSize : Style.TextSizeHeader);
         }
 
-        public class Colors : DefaultStyle {
-
-        }
+        public class Colors : DefaultStyle {}
 
         public static Color Color(string hex) {
             return ColorTranslator.FromHtml(hex);

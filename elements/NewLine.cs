@@ -10,5 +10,12 @@ namespace GDSharp {
                 Width = Dimensions.Width;
             }
         }
+
+        public partial class NewLineBig : Label {
+            public NewLineBig() {
+                Height = Style.TextSize * 3;
+                Width = Dimensions.Width;
+            }
+        }
     }
 }

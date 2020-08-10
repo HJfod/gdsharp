@@ -11,5 +11,13 @@ namespace GDSharp {
                 ForeColor = Style.Color(Style.Colors.Text);
             }
         }
+        
+        public partial class Text : Label {
+            public Text() {
+                Font = Style.GetFont();
+                AutoSize = true;
+                ForeColor = Style.Color(Style.Colors.Text);
+            }
+        }
     }
 }

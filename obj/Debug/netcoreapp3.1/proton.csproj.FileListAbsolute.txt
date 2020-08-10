@@ -24,5 +24,3 @@ D:\github\gdsharp\obj\Debug\netcoreapp3.1\proton.AssemblyInfo.cs
 D:\github\gdsharp\obj\Debug\netcoreapp3.1\proton.dll
 D:\github\gdsharp\obj\Debug\netcoreapp3.1\proton.pdb
 D:\github\gdsharp\obj\Debug\netcoreapp3.1\proton.genruntimeconfig.cache
-D:\github\gdsharp\bin\Debug\netcoreapp3.1\ICSharpCode.SharpZipLib.dll
-D:\github\gdsharp\obj\Debug\netcoreapp3.1\proton.csproj.CopyComplete
