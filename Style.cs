@@ -11,6 +11,7 @@ namespace GDSharp {
         public static int TextSize = 10;
         public static int TextSizeHeader = 18;
         public static int PaddingSize = 4;
+        public static int PaddingSizeBig = PaddingSize * 2;
         public static int TransitionTime = 50;
         public static int CornerSize = 5;
         public static int TimerFPS = 10;
@@ -19,7 +20,7 @@ namespace GDSharp {
 
         public static Padding ButtonPadding = new Padding(PaddingSize * 4, PaddingSize, PaddingSize * 4, PaddingSize);
         public static Padding Padding = new Padding(PaddingSize, PaddingSize, PaddingSize, PaddingSize);
-        public static Padding BigPadding = new Padding(PaddingSize * 2, PaddingSize * 2, PaddingSize * 2, PaddingSize * 2);
+        public static Padding BigPadding = new Padding(PaddingSizeBig, PaddingSizeBig, PaddingSizeBig, PaddingSizeBig);
 
         public class Fonts {
             public static string Main = "OpenSans.ttf";

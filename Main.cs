@@ -15,7 +15,7 @@ namespace GDSharp {
 
         public static GDShare GDShare = new GDShare();
 
-        private static void ShowLoadingMessage(string msg, int prog) {
+        public static void ShowLoadingMessage(string msg, int prog) {
             Program.BootupSplash.Progress.Text = msg;
             Program.BootupSplash.SetProgress((float)prog);
         }

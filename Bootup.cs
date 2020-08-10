@@ -42,7 +42,7 @@ namespace GDSharp {
         public Panel ProgressBar;
 
         private static int ProgressBarWidth = 350;
-        private static int ProgressBarHeight = 10;
+        private static int ProgressBarHeight = 7;
 
         public void SetProgress(float percentage) {
             ProgressBar.Width = (int)((float)ProgressBarWidth * (percentage / 100f));

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Threading;
 
@@ -12,6 +13,7 @@ namespace GDSharp {
     public class GDShare {
         private static string _GMSaveData;
         private static string _LLSaveData;
+        private static List<dynamic> _LevelList;
 
         private static string DecryptXOR(string str, int key) {
             byte[] xor = Encoding.UTF8.GetBytes(str);
@@ -123,6 +125,58 @@ namespace GDSharp {
                     Killed_Players = GetKey(statdata, "9", "s")
                 }
             };
+        }
+
+        public static List<dynamic> GetLevelList(string savedata = null, Action<string, int> callback = null) {
+            if (savedata == null) savedata = _LLSaveData;
+
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            List<dynamic> levels = new List<dynamic>();
+            string matcher = @"<k>k_\d+<\/k>.+?<\/d>\n? *<\/d>";
+            
+            foreach (Match lvl in Regex.Matches(savedata, matcher, RegexOptions.Singleline, Regex.InfiniteMatchTimeout)) {
+                if (lvl.Value != "") {
+                    string Name = GetKey(lvl.Value, "k2", "s");
+
+                    if (callback != null) callback($"Loaded {Name}", 100);
+
+                    levels.Add(new { Name = Name, Data = lvl });
+                }
+            }
+
+            watch.Stop();
+            Console.WriteLine($"+ Got levels in {watch.ElapsedMilliseconds}ms");
+
+            _LevelList = levels;
+
+            return levels;
+        }
+
+        public static string ExportLevel(string name, string path = "") {
+            try {
+                dynamic lvl = null;
+
+                foreach (dynamic x in _LevelList) {
+                    if (x.Name == name) {
+                        lvl = x;
+                        break;
+                    }
+                }
+
+                if (lvl == null) {
+                    return $"Level {name} not found.";
+                } else {
+                    string output = $@"{path}\{name}.gmd";
+
+                    File.WriteAllText(output, lvl.data.Replace(new Regex(@"<k>k_\d+<\/k>"), ""));
+
+                    return null;
+                }
+            } catch {
+                return $"Unknown error exporting {name}.";
+            }
         }
     }
 }
