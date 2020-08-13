@@ -23,17 +23,24 @@ namespace GDSharp {
         }
 
         public partial class GDLevel : FlowLayoutPanel {
-            public GDLevel(string iText = "GDLevel") {
-                Width = Dimensions.Width - Style.PaddingSizeBig * 4;
-                Height = Style.PaddingSizeBig * 2 + Style.GetFont().Height;
-                BackColor = Style.Color(Style.Colors.Main);
-                ForeColor = Style.Color(Style.Colors.TitlebarText);
-                Padding = Style.BigPadding;
-                Font = Style.GetFont();
-                Text = iText;
+            public FlowLayoutPanel Contents;
 
-                Paint += Draw;
-                Click += Roll;
+            public GDLevel(string iText = "GDLevel") {
+                this.Width = Dimensions.Width - Style.PaddingSizeBig * 4;
+                this.Height = Style.PaddingSizeBig * 2 + Style.GetFont().Height;
+                this.BackColor = Style.Color(Style.Colors.Main);
+                this.ForeColor = Style.Color(Style.Colors.TitlebarText);
+                this.Padding = Style.BigPadding;
+                this.Font = Style.GetFont();
+                this.Text = iText;
+
+                this.Contents = new FlowLayoutPanel();
+                this.Contents.Hide();
+
+                this.Controls.Add(this.Contents);
+
+                this.Paint += this.Draw;
+                this.Click += this.Roll;
             }
 
             private void Draw(object sender, PaintEventArgs e) {
@@ -54,8 +61,12 @@ namespace GDSharp {
                 TextRenderer.DrawText(e.Graphics, this.Text, this.Font, tr, this.ForeColor, TextFormatFlags.VerticalCenter);
             }
 
+            public void Add (Control arg) {
+                this.Contents.Controls.Add(arg);
+            }
+
             private void Roll(object Sender, EventArgs e) {
-                Console.WriteLine("se");
+                this.Contents.Visible = this.Contents.Visible ? false : true;
             }
         }
     }
