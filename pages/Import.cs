@@ -14,16 +14,18 @@ namespace GDSharp {
 
                 Elements.Container C = new Elements.Container();
 
-                var button = new Elements.GButton();
-                button.Text = "Import";
-                button.Click += new EventHandler(OnClick);
+                var ImportButton = new Elements.GButton();
+                ImportButton.Text = "Import";
+                ImportButton.Click += new EventHandler(OnClick);
 
-                var button2 = new Elements.GButton();
-                button2.Text = "Another button";
-                button2.Click += new EventHandler(OnClick);
+                Elements.Div ImportLeveLArea = new Elements.Div();
 
-                C.Controls.Add(button);
-                C.Controls.Add(button2);
+                Elements.GDLevel TestLevel = new Elements.GDLevel();
+
+                ImportLeveLArea.Controls.Add(TestLevel);
+
+                C.Controls.Add(ImportButton);
+                C.Controls.Add(ImportLeveLArea);
 
                 Controls.Add(C);
             }
