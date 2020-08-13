@@ -142,7 +142,7 @@ namespace GDSharp {
 
                     if (callback != null) callback($"Loaded {Name}", 100);
 
-                    levels.Add(new { Name = Name, Data = lvl });
+                    levels.Add(new { Name = Name, Data = lvl.ToString() });
                 }
             }
 
@@ -170,9 +170,9 @@ namespace GDSharp {
                 } else {
                     string output = $@"{path}\{name}.gmd";
 
-                    Console.WriteLine(Regex.Replace(lvl.Data, @"<k>k_\d+<\/k>", ""));
+                    string NewData = Regex.Replace(lvl.Data, @"<k>k_\d+<\/k>", "");
 
-                    File.WriteAllText(output, Regex.Replace(lvl.Data, @"<k>k_\d+<\/k>", ""));
+                    File.WriteAllText(output, NewData);
 
                     return null;
                 }

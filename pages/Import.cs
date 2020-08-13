@@ -12,6 +12,8 @@ namespace GDSharp {
             private void InitializeComponent() {
                 Name = "Import";
 
+                Elements.Container C = new Elements.Container();
+
                 var button = new Elements.GButton();
                 button.Text = "Import";
                 button.Click += new EventHandler(OnClick);
@@ -20,8 +22,10 @@ namespace GDSharp {
                 button2.Text = "Another button";
                 button2.Click += new EventHandler(OnClick);
 
-                Controls.Add(button);
-                Controls.Add(button2);
+                C.Controls.Add(button);
+                C.Controls.Add(button2);
+
+                Controls.Add(C);
             }
 
             private void OnClick(object sender, EventArgs e) {
