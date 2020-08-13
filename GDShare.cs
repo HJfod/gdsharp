@@ -170,12 +170,14 @@ namespace GDSharp {
                 } else {
                     string output = $@"{path}\{name}.gmd";
 
-                    File.WriteAllText(output, lvl.data.Replace(new Regex(@"<k>k_\d+<\/k>"), ""));
+                    Console.WriteLine(Regex.Replace(lvl.Data, @"<k>k_\d+<\/k>", ""));
+
+                    File.WriteAllText(output, Regex.Replace(lvl.Data, @"<k>k_\d+<\/k>", ""));
 
                     return null;
                 }
-            } catch {
-                return $"Unknown error exporting {name}.";
+            } catch (Exception e) {
+                return $"Error exporting {name}: {e}.";
             }
         }
     }
