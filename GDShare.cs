@@ -13,6 +13,7 @@ namespace GDSharp {
     public class GDShare {
         private static string _GMSaveData;
         private static string _LLSaveData;
+        private static string _CCDirPath;
         private static List<dynamic> _LevelList;
 
         private static string DecryptXOR(string str, int key) {
@@ -84,12 +85,15 @@ namespace GDSharp {
                 Console.WriteLine($"Decompressing ZLib took {watch.ElapsedMilliseconds}ms");
 
                 Console.WriteLine($"+ Decoded {path.Split("\\").Last()}");
-
+                
+                _CCDirPath = path.Substring(0, path.LastIndexOf("\\"));
+                Console.WriteLine(_CCDirPath);
                 if (isLL) _LLSaveData = data; else _GMSaveData = data;
                 return data;
             } else {
                 Console.WriteLine($"+ {path.Split("\\").Last()} is already decoded");
-
+                
+                _CCDirPath = path.Substring(0, path.LastIndexOf("\\"));
                 if (isLL) _LLSaveData = file; else _GMSaveData = file;
                 return file;
             }
@@ -250,6 +254,29 @@ namespace GDSharp {
                 }
             } catch (Exception e) {
                 return $"Error exporting {name}: {e}.";
+            }
+        }
+
+        public static string ImportLevel(string path) {
+            if (File.Exists(path)) {
+                try {
+                    string lvl = File.ReadAllText(path);
+                    string data = _LLSaveData;
+                    
+                    data = Regex.Replace(data, @"<k>k1<\/k><i>\d+?<\/i>", "");
+                    string[] splitData = data.Split("<k>_isArr</k><t />");
+                    splitData[1] = Regex.Replace(splitData[1], @"<k>k_(\d+)<\/k><d><k>kCEK<\/k>",
+                    (Match m) => $"<k>k_{(Int32.Parse((Regex.Match(m.Value, @"k_\d+").Value.Substring(2))) + 1)}</k><d><k>kCEK</k>");
+                    data = splitData[0] + "<k>_isArr</k><t /><k>k_0</k>" + lvl + splitData[1];
+
+                    File.WriteAllText($"{_CCDirPath}\\CCLocalLevels.dat", data);
+
+                    return null;
+                } catch (Exception e) {
+                    return e.ToString();
+                }
+            } else {
+                return "File doesn't exist!";
             }
         }
     }

@@ -60,6 +60,10 @@ namespace GDSharp {
             Pages.Size = new Size(Dimensions.Width, Dimensions.Height - Style.TabHeight);
             Pages.BackColor = Style.Color(Style.Colors.Dark);
 
+            DragEnter += DropFileHover;
+            DragDrop += DropFile;
+            AllowDrop = true;
+
             foreach (var i in new List<Panel> {
                 new Pages.Home(),
                 new Pages.Backups(),
@@ -115,6 +119,19 @@ namespace GDSharp {
             }
             foreach (Pages.Tab p in Pages.Controls) {
                 p.Hide();
+            }
+        }
+
+        void DropFileHover(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                e.Effect = DragDropEffects.All;
+            }
+        }
+
+        void DropFile(object sender, DragEventArgs e) {
+            string[] s = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
+            foreach (string i in s) {
+                Console.WriteLine(i);
             }
         }
     }

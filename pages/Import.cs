@@ -21,22 +21,6 @@ namespace GDSharp {
 
                 Elements.Div ImportLeveLArea = new Elements.Div();
 
-                Elements.GDLevel TestLevel = new Elements.GDLevel();
-
-                ImportLeveLArea.Controls.Add(TestLevel);
-
-                dynamic UserInfo = GDShare.GetLevelInfo("Aspire");
-
-                string Stats = "";
-
-                foreach (PropertyInfo i in UserInfo.GetType().GetProperties()) {
-                    Stats += $"{i.Name.Replace("_", " ")}: {i.GetValue(UserInfo)}\n";
-                }
-
-                TestLevel.Add((new Elements.Text(Stats, Style.Color(Style.Colors.TitlebarText))));
-                TestLevel.Add(new Elements.NewLineBig());
-                TestLevel.Add(((new Elements.GButton(Style.Color(Style.Colors.Main), "click for vore"))));
-
                 C.Controls.Add(ImportButton);
                 C.Controls.Add(ImportLeveLArea);
 
