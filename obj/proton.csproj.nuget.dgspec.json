@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\github\\gdsharp\\proton.csproj": {}
+    "C:\\Users\\aaroh\\Documents\\github\\gdsharp\\proton.csproj": {}
   },
   "projects": {
-    "D:\\github\\gdsharp\\proton.csproj": {
+    "C:\\Users\\aaroh\\Documents\\github\\gdsharp\\proton.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\github\\gdsharp\\proton.csproj",
+        "projectUniqueName": "C:\\Users\\aaroh\\Documents\\github\\gdsharp\\proton.csproj",
         "projectName": "proton",
-        "projectPath": "D:\\github\\gdsharp\\proton.csproj",
-        "packagesPath": "C:\\Users\\HJ\\.nuget\\packages\\",
-        "outputPath": "D:\\github\\gdsharp\\obj\\",
+        "projectPath": "C:\\Users\\aaroh\\Documents\\github\\gdsharp\\proton.csproj",
+        "packagesPath": "C:\\Users\\aaroh\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\aaroh\\Documents\\github\\gdsharp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\HJ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\aaroh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,7 +55,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

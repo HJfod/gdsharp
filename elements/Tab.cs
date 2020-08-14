@@ -58,6 +58,7 @@ namespace GDSharp {
                 FlatStyle = FlatStyle.Flat;
                 FlatAppearance.BorderSize = 0;
                 FlatAppearance.BorderColor = Color.FromArgb(0,0,0,0);
+                Padding = new Padding(Style.PaddingSizeBig, 0, Style.PaddingSizeBig, 0);
                 MouseEnter += HoverIn;
                 MouseLeave += HoverOut;
                 Height = Style.TabHeight;

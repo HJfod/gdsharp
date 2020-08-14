@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace GDSharp {
     public class Dimensions {
         public static int Width = 440;
         public static int Height = 550;
+        public static float Scale = 1;
     }
 
     public class Settings {
@@ -40,12 +42,16 @@ namespace GDSharp {
             AttachConsole( -1 );
 
             Console.WriteLine("% Booting up...");
-            
-            Style.InitializeFonts();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
+            Dimensions.Scale = ( (new Elements.NewLine()).CreateGraphics().DpiX / 96 );
+            Dimensions.Width = (int)((float)Dimensions.Width * Dimensions.Scale);
+            Dimensions.Height = (int)((float)Dimensions.Height * Dimensions.Scale);
+
+            Style.InitializeFonts();
 
             Bootup.Start();
             
