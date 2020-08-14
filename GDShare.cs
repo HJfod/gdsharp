@@ -99,10 +99,18 @@ namespace GDSharp {
             return $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\\..\\Local\\GeometryDash\\CC{which}.dat";
         }
 
-        private static string GetKey(string savedata, string key, string type, bool legacy = false) {
+        private static string GetKey(string savedata, string key, string type = ".*?", bool legacy = false) {
+            if (type == null) {
+                Match match = Regex.Match(savedata, $"<k>{key}</k>.*?>", RegexOptions.None, Regex.InfiniteMatchTimeout);
+                if (match.Value != "") {
+                    return match.Value.Substring(match.Value.LastIndexOf("<")).IndexOf("t") > -1 ? "True" : "False";
+                } else {
+                    return "False";
+                }
+            }
             string matcher = $"<k>{key}</k><{type}>.*?</{type}>";
             Match m = Regex.Match(savedata, matcher, RegexOptions.None, Regex.InfiniteMatchTimeout);
-            return m.Value.Substring($"<k>{key}</k><{type}>".Length, m.Value.Length - $"<k>{key}</k><{type}>".Length - $"</{type}>".Length);
+            return m.Value == "" ? "" : m.Value.Substring($"<k>{key}</k><A>".Length, m.Value.Length - $"<k>{key}</k><A>".Length - $"</A>".Length);
         }
         
         public static dynamic GetGDUserInfo(string savedata) {
@@ -152,6 +160,70 @@ namespace GDSharp {
             _LevelList = levels;
 
             return levels;
+        }
+
+        private static string ReplaceOfficialSongName(string Song) {
+            return (new Dictionary<string, string> {
+                { "0", "Stereo Madness" },
+                { "1", "Back on Track" },
+                { "2", "Polargeist" },
+                { "3", "Dry Out" },
+                { "4", "Base After Base" },
+                { "5", "Cant Let Go" },
+                { "6", "Jumper" },
+                { "7", "Time Machine" },
+                { "8", "Cycles" },
+                { "9", "xStep" },
+                { "10", "Clutterfunk" },
+                { "11", "Theory of Everything" },
+                { "12", "Electroman Adventures" },
+                { "13", "Clubstep" },
+                { "14", "Electrodynamix" },
+                { "15", "Hexagon Force" },
+                { "16", "Blast Processing" },
+                { "17", "Theory of Everything 2" },
+                { "18", "Geometrical Dominator" },
+                { "19", "Deadlocked" },
+                { "20", "Fingerdash" },
+            })[Song];
+        }
+
+        public static dynamic GetLevelInfo(string name) {
+            dynamic lvl = null;
+
+            foreach (dynamic x in _LevelList) {
+                if (x.Name == name) {
+                    lvl = x;
+                    break;
+                }
+            }
+
+            if (lvl == null) {
+                return null;
+            } else {
+                int editorTime = Int32.Parse(GetKey(lvl.Data, "k80"));
+                string P = GetKey(lvl.Data, "k41");
+                string Song = GetKey(lvl.Data, "k8");
+                string Desc = Encoding.UTF8.GetString(DecryptBase64(GetKey(lvl.Data, "k3")));
+                string Rev = GetKey(lvl.Data, "k46");
+                string Copy = GetKey(lvl.Data, "k42");
+
+                return new {
+                    Name = GetKey(lvl.Data, "k2"),
+                    Length = GetKey(lvl.Data, "k23"),
+                    Creator = GetKey(lvl.Data, "k5"),
+                    Version = GetKey(lvl.Data, "k16"),
+                    Password = P == "1" ? "Free to Copy" : P == "" ? "No copy" : P.Substring(1),
+                    Song = Song != "" ? ReplaceOfficialSongName(Song) : GetKey(lvl.Data, "k45"),
+                    Description = Desc,
+                    Object_count = GetKey(lvl.Data, "k48"),
+                    Editor_time = editorTime > 3600 ? $"{Math.Round((float)editorTime / 3600F, 2)}h" : $"{Math.Round((float)editorTime / 60F, 2)}m",
+                    Verified = GetKey(lvl.Data, "k14", null),
+                    Attempts = GetKey(lvl.Data, "k18"),
+                    Revision = Rev == "" ? "None" : Rev,
+                    Copied_from = Copy == "" ? "None" : Copy
+                };
+            }
         }
 
         public static string ExportLevel(string name, string path = "") {

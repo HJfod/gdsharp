@@ -11,6 +11,7 @@ namespace GDSharp {
             private Color CurrentBGColor = Style.Color(Style.Colors.Light);
             private bool hovering = false;
             private float hoverAnimation = 0;
+            private Color BGColor;
 
             private float GetDest(string which) {
                 int HR = Convert.ToInt16(this.ButtonHVColor.R);
@@ -29,17 +30,21 @@ namespace GDSharp {
                 return 0F;
             }
 
-            public GButton() {
-                AutoSize = true;
-                Font = Style.GetFont();
-                ForeColor = Style.Color(Style.Colors.Text);
-                BackColor = Color.FromArgb(0,0,0,0);
-                FlatStyle = FlatStyle.Flat;
-                FlatAppearance.BorderSize = 0;
-                Padding = Style.ButtonPadding;
-                MouseEnter += HoverIn;
-                MouseLeave += HoverOut;
-                TabStop = false;
+            public GButton(Color? _BG = null, string _Text = null) {
+                this.AutoSize = true;
+                this.Font = Style.GetFont();
+                this.ForeColor = Style.Color(Style.Colors.Text);
+                this.BackColor = Color.FromArgb(0,0,0,0);
+                this.FlatStyle = FlatStyle.Flat;
+                this.FlatAppearance.BorderSize = 0;
+                this.Padding = Style.ButtonPadding;
+                this.MouseEnter += this.HoverIn;
+                this.MouseLeave += this.HoverOut;
+                this.TabStop = false;
+
+                this.BGColor = _BG is Color ? (Color) _BG : Style.Color(Style.Colors.Dark);
+
+                if (_Text != null) this.Text = _Text;
 
                 this.hoverTimer = new Timer();
                 this.hoverTimer.Interval = Style.TimerFPS;
@@ -50,7 +55,7 @@ namespace GDSharp {
                 base.OnPaint(e);
                 using (Brush b = new SolidBrush(this.CurrentBGColor)) {
                     TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
-                    e.Graphics.FillRectangle(new SolidBrush(Style.Color(Style.Colors.Dark)), this.ClientRectangle);
+                    e.Graphics.FillRectangle(new SolidBrush(this.BGColor), this.ClientRectangle);
                     e.Graphics.FillPath(b, Shapes.RoundedRect(this.ClientRectangle, new int[1] { Style.CornerSize }));
                     TextRenderer.DrawText(e.Graphics, this.Text, this.Font, this.ClientRectangle, this.ForeColor, flags);
                     //e.Graphics.DrawString(this.Text, this.Font, new SolidBrush(this.ForeColor), ClientRectangle);
@@ -92,7 +97,7 @@ namespace GDSharp {
                 if (stopCondition) {
                     this.hoverTimer.Stop();
                 } else {
-                    this.hoverAnimation += hoverTimer.Interval * Direction;
+                    this.hoverAnimation += this.hoverTimer.Interval * Direction;
 
                     this.CurrentBGColor = Color.FromArgb(
                         Convert.ToInt16(ButtonBGColor.R) + (int)(GetDest("R") * (this.hoverAnimation / Style.TransitionTime)),

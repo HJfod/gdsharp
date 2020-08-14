@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Reflection;
 
 namespace GDSharp {
     namespace Pages {
@@ -23,10 +24,18 @@ namespace GDSharp {
                 Elements.GDLevel TestLevel = new Elements.GDLevel();
 
                 ImportLeveLArea.Controls.Add(TestLevel);
-                
-                var t = new Label();
-                t.Text = "test text\n\nmore more\nsex";
-                TestLevel.Add(t);
+
+                dynamic UserInfo = GDShare.GetLevelInfo("Aspire");
+
+                string Stats = "";
+
+                foreach (PropertyInfo i in UserInfo.GetType().GetProperties()) {
+                    Stats += $"{i.Name.Replace("_", " ")}: {i.GetValue(UserInfo)}\n";
+                }
+
+                TestLevel.Add((new Elements.Text(Stats, Style.Color(Style.Colors.TitlebarText))));
+                TestLevel.Add(new Elements.NewLineBig());
+                TestLevel.Add(((new Elements.GButton(Style.Color(Style.Colors.Main), "click for vore"))));
 
                 C.Controls.Add(ImportButton);
                 C.Controls.Add(ImportLeveLArea);
