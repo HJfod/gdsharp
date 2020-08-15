@@ -35,6 +35,7 @@ namespace GDSharp {
 
         private Panel Tabs;
         private Panel Pages;
+        public Pages.Overlay Overlay;
 
         private void InitializeComponent() {
             Text = $"{Settings.AppName} {Settings.VersionString}";
@@ -61,8 +62,12 @@ namespace GDSharp {
             Pages.BackColor = Style.Color(Style.Colors.Dark);
 
             DragEnter += DropFileHover;
+            DragLeave += FileUnHover;
             DragDrop += DropFile;
             AllowDrop = true;
+
+            Overlay = new Pages.Overlay();
+            Overlay.Location = new Point(0,0);
 
             foreach (var i in new List<Panel> {
                 new Pages.Home(),
@@ -91,10 +96,14 @@ namespace GDSharp {
             MainPanel.Size = new Size(Dimensions.Width, Dimensions.Height);
             MainPanel.Padding = new Padding(0);
             MainPanel.Margin = new Padding(0);
+            MainPanel.Location = new Point(0,0);
             MainPanel.Controls.Add(Tabs);
             MainPanel.Controls.Add(Pages);
 
             Controls.Add(MainPanel);
+            Controls.Add(Overlay);
+
+            Overlay.BringToFront();
 
             CenterToScreen();
 
@@ -125,7 +134,12 @@ namespace GDSharp {
         void DropFileHover(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 e.Effect = DragDropEffects.All;
+                Overlay.ToggleOverlay(true);
             }
+        }
+
+        void FileUnHover(object sender, EventArgs e) {
+            Overlay.ToggleOverlay(false);
         }
 
         void DropFile(object sender, DragEventArgs e) {
@@ -133,6 +147,7 @@ namespace GDSharp {
             foreach (string i in s) {
                 Console.WriteLine(i);
             }
+            Overlay.ToggleOverlay(false);
         }
     }
 }

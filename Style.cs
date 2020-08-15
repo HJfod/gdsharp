@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace GDSharp {
     public class Style {
-        public static int Scale(int Var) {
+        public static int Scale (int Var) {
             return (int)((float)Var * AppScale);
         }
 
@@ -38,7 +38,7 @@ namespace GDSharp {
             _pfc.AddFontFile($"resources\\{Fonts.Head}");
         }
 
-        public static Font GetFont(int CustomSize = 0) {
+        public static Font GetFont (int CustomSize = 0) {
             return new Font(_pfc.Families[1], CustomSize > 0 ? Scale(CustomSize) : Style.TextSize);
         }
 

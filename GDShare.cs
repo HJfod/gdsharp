@@ -195,10 +195,14 @@ namespace GDSharp {
         public static dynamic GetLevelInfo(string name) {
             dynamic lvl = null;
 
-            foreach (dynamic x in _LevelList) {
-                if (x.Name == name) {
-                    lvl = x;
-                    break;
+            if (name.IndexOf("\\") > -1) {
+                lvl = new { Data = File.ReadAllText(name) };
+            } else {
+                foreach (dynamic x in _LevelList) {
+                    if (x.Name == name) {
+                        lvl = x;
+                        break;
+                    }
                 }
             }
 

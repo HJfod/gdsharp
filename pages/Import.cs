@@ -10,6 +10,8 @@ namespace GDSharp {
                 InitializeComponent();
             }
 
+            Elements.Div ImportLeveLArea;
+
             private void InitializeComponent() {
                 Name = "Import";
 
@@ -19,7 +21,7 @@ namespace GDSharp {
                 ImportButton.Text = "Import";
                 ImportButton.Click += new EventHandler(OnClick);
 
-                Elements.Div ImportLeveLArea = new Elements.Div();
+                ImportLeveLArea = new Elements.Div();
 
                 C.Controls.Add(ImportButton);
                 C.Controls.Add(ImportLeveLArea);
@@ -27,8 +29,47 @@ namespace GDSharp {
                 Controls.Add(C);
             }
 
+            public void AddImport(string file) {
+                Elements.GDLevel Level = new Elements.GDLevel(file);
+
+                dynamic LevelInfo = GDShare.GetLevelInfo(file);
+                
+                string Info = "";
+
+                foreach (PropertyInfo i in LevelInfo.GetType().GetProperties()) {
+                    if (i.Name != "Name" && i.Name != "Creator" && i.Name != "Description")
+                        Info += $"{i.Name.Replace("_", " ")}: {i.GetValue(LevelInfo)}\n";
+                }
+
+                Color c = Style.Color(Style.Colors.TitlebarText);
+
+                Level.Add(new Elements.Header(LevelInfo.Name, c));
+                Level.Add(new Elements.NewLine());
+                Level.Add(new Elements.Text($"by {LevelInfo.Creator}", c));
+                Level.Add(new Elements.NewLine());
+                Level.Add(new Elements.TextDark($"\"{LevelInfo.Description}\"", Color.FromArgb(150, c)));
+                Level.Add(new Elements.NewLine());
+                Level.Add(new Elements.Text($"{Info}", c));
+                Level.Add(new Elements.NewLineBig());
+                Level.Add(new Elements.GButton(Style.Color(Style.Colors.Main), "Import"));
+
+                ImportLeveLArea.Controls.Add(Level);
+            }
+
             private void OnClick(object sender, EventArgs e) {
-                Console.WriteLine("bbbbb");
+                using (OpenFileDialog ofd = new OpenFileDialog()) {
+                    ofd.InitialDirectory = "c:\\";
+                    ofd.Filter = "Level files (*.lvl;*gmd)|*.lvl;*.gmd|All files (*.*)|*.*";
+                    ofd.FilterIndex = 1;
+                    ofd.RestoreDirectory = true;
+                    ofd.Multiselect = true;
+
+                    if (ofd.ShowDialog() == DialogResult.OK) {
+                        foreach (string file in ofd.FileNames) {
+                            AddImport(file);
+                        }
+                    }
+                }
             }
         }
     }
