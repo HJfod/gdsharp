@@ -6,19 +6,12 @@ using System.Drawing.Drawing2D;
 namespace GDSharp {
     namespace Elements {
         public partial class Container : FlowLayoutPanel {
-            public VScrollBar ScrollBar = new VScrollBar();
-
             public Container() {
                 this.Width = Dimensions.Width;
                 this.Height = Dimensions.Height - Style.TabHeight;
                 this.BackColor = Color.FromArgb(0,0,0,0);
                 this.Padding = Style.BigPadding;
                 this.Margin = Style.BigPadding;
-
-                this.ScrollBar.Location = new Point(Dimensions.Width - ScrollBar.Width, 0);
-                this.ScrollBar.Scroll += (sender, e) => { this.VerticalScroll.Value = ScrollBar.Value; };
-
-                this.Parent.Controls.Add(this.ScrollBar);
             }
         }
 

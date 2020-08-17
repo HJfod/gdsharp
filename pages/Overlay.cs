@@ -94,7 +94,7 @@ namespace GDSharp {
                 this.Invalidate();
             }
 
-            public void ToggleOverlay(bool show = true) {
+            public void SlideOverlay(bool show = true) {
                 if (this._Timer.Enabled) this._Timer.Stop();
                 this._Anim = show;
                 this._Timer.Start();

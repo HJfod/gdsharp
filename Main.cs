@@ -36,6 +36,7 @@ namespace GDSharp {
         private Panel Tabs;
         private Panel Pages;
         public Pages.Overlay Overlay;
+        private VScrollBar ScrollBar;
 
         private void InitializeComponent() {
             Text = $"{Settings.AppName} {Settings.VersionString}";
@@ -44,7 +45,6 @@ namespace GDSharp {
             MaximizeBox = false;
             StartPosition = FormStartPosition.CenterScreen;
             BackColor = Style.Color(Style.Colors.Background);
-            Click += Nullify;
 
             MainPanel = new Panel();
 
@@ -68,6 +68,9 @@ namespace GDSharp {
 
             Overlay = new Pages.Overlay();
             Overlay.Location = new Point(0,0);
+
+            ScrollBar = new VScrollBar();
+            ScrollBar.Location = new Point(Dimensions.Width - ScrollBar.Width, 0);
 
             foreach (var i in new List<Panel> {
                 new Pages.Home(),
@@ -100,6 +103,8 @@ namespace GDSharp {
             MainPanel.Controls.Add(Tabs);
             MainPanel.Controls.Add(Pages);
 
+            Pages.Controls.Add(this.ScrollBar);
+
             Controls.Add(MainPanel);
             Controls.Add(Overlay);
 
@@ -118,28 +123,32 @@ namespace GDSharp {
             Console.WriteLine("+ App succesfully booted up!");
         }
 
-        void Nullify(Object sender, EventArgs e) {
-            ActiveControl = null;
+        public void ShowScrollBar(bool show = true) {
+            //ScrollBar.Visible = show;
+            //ScrollBar.Scroll -= null;
+            //ScrollBar.Scroll += (sender, e) => { this.VerticalScroll.Value = ScrollBar.Value; };
         }
         
         void TabSelect(Object sender, EventArgs e) {
             foreach (Elements.Tab p in Tabs.Controls) {
                 p.Selected = false;
             }
-            foreach (Pages.Tab p in Pages.Controls) {
-                p.Hide();
+            foreach (Control p in Pages.Controls) {
+                if (p is Pages.Tab) {
+                    p.Hide();
+                }
             }
         }
 
         void DropFileHover(object sender, DragEventArgs e) {
             if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
                 e.Effect = DragDropEffects.All;
-                Overlay.ToggleOverlay(true);
+                Overlay.SlideOverlay(true);
             }
         }
 
         void FileUnHover(object sender, EventArgs e) {
-            Overlay.ToggleOverlay(false);
+            Overlay.SlideOverlay(false);
         }
 
         void DropFile(object sender, DragEventArgs e) {
@@ -147,7 +156,7 @@ namespace GDSharp {
             foreach (string i in s) {
                 Console.WriteLine(i);
             }
-            Overlay.ToggleOverlay(false);
+            Overlay.SlideOverlay(false);
         }
     }
 }

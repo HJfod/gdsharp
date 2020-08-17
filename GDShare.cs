@@ -112,7 +112,10 @@ namespace GDSharp {
                     return "False";
                 }
             }
-            string matcher = $"<k>{key}</k><{type}>.*?</{type}>";
+            string actualTypeMatch = Regex.Match(savedata, $"<k>{key}</k><{type}>", RegexOptions.None, Regex.InfiniteMatchTimeout).Value;
+            string actualType = actualTypeMatch.Substring(actualTypeMatch.LastIndexOf("<")+1, 1);
+
+            string matcher = $"<k>{key}</k><{actualType}>.*?</{actualType}>";
             Match m = Regex.Match(savedata, matcher, RegexOptions.None, Regex.InfiniteMatchTimeout);
             return m.Value == "" ? "" : m.Value.Substring($"<k>{key}</k><A>".Length, m.Value.Length - $"<k>{key}</k><A>".Length - $"</A>".Length);
         }
@@ -120,21 +123,22 @@ namespace GDSharp {
         public static dynamic GetGDUserInfo(string savedata) {
             if (savedata == null) savedata = _GMSaveData;
 
-            string statdata = GetKey(savedata, "GS_value", "d");
+            string statdata = GetKey(savedata, "GS_value");
             return new {
-                Name = GetKey(savedata, "playerName", "s"),
-                UserID = GetKey(savedata, "playerUserID", "i"),
+                Name = GetKey(savedata, "playerName"),
+                UserID = GetKey(savedata, "playerUserID"),
                 Stats = new {
-                    Jumps = GetKey(statdata, "1", "s"),
-                    Total_Attempts = GetKey(statdata, "2", "s"),
-                    Completed_Online_Levels = GetKey(statdata, "4", "s"),
-                    Demons = GetKey(statdata, "5", "s"),
-                    Stars = GetKey(statdata, "6", "s"),
-                    Diamonds = GetKey(statdata, "13", "s"),
-                    Orbs = GetKey(statdata, "14", "s"),
-                    Coins = GetKey(statdata, "8", "s"),
-                    User_Coins = GetKey(statdata, "12", "s"),
-                    Killed_Players = GetKey(statdata, "9", "s")
+                    Jumps = GetKey(statdata, "1"),
+                    Total_Attempts = GetKey(statdata, "2"),
+                    Completed_Online_Levels = GetKey(statdata, "4"),
+                    Demons = GetKey(statdata, "5"),
+                    Stars = GetKey(statdata, "6"),
+                    Diamonds = GetKey(statdata, "13"),
+                    Orbs = GetKey(statdata, "14"),
+                    Coins = GetKey(statdata, "8"),
+                    User_Coins = GetKey(statdata, "12"),
+                    Killed_Players = GetKey(statdata, "9"),
+                    Game_Opened = $"{GetKey(savedata, "bootups")} times"
                 }
             };
         }
