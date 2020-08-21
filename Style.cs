@@ -12,8 +12,8 @@ namespace GDSharp {
 
         public static float AppScale = Dimensions.Scale;
 
-        public static int TextSize = Scale(10);
-        public static int TextSizeHeader = Scale(18);
+        public static int TextSize = 10;
+        public static int TextSizeHeader = 18;
         public static int PaddingSize = Scale(4);
         public static int PaddingSizeBig = Scale(PaddingSize * 2);
         public static int TransitionTime = 50;
@@ -39,11 +39,11 @@ namespace GDSharp {
         }
 
         public static Font GetFont (int CustomSize = 0) {
-            return new Font(_pfc.Families[1], CustomSize > 0 ? Scale(CustomSize) : Style.TextSize);
+            return new Font(_pfc.Families[1], CustomSize > 0 ? CustomSize : Style.TextSize);
         }
 
         public static Font GetHeaderFont(int CustomSize = 0) {
-            return new Font(_pfc.Families[0], CustomSize > 0 ? Scale(CustomSize) : Style.TextSizeHeader);
+            return new Font(_pfc.Families[0], CustomSize > 0 ? CustomSize : Style.TextSizeHeader);
         }
 
         public class Colors : DefaultStyle {}

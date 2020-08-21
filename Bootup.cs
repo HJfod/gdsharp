@@ -41,8 +41,8 @@ namespace GDSharp {
         public Label Progress;
         public Panel ProgressBar;
 
-        private static int ProgressBarWidth = 350;
-        private static int ProgressBarHeight = 7;
+        private static int ProgressBarWidth = Style.Scale(350);
+        private static int ProgressBarHeight = Style.Scale(7);
 
         public void SetProgress(float percentage) {
             ProgressBar.Width = (int)((float)ProgressBarWidth * (percentage / 100f));
@@ -62,11 +62,11 @@ namespace GDSharp {
             Image AppIcon = Image.FromFile(@"resources\icon.png");
 
             PictureBox Pic = new PictureBox();
-            Pic.Image = ResizeImage(AppIcon, 170, 170);
-            Pic.Location = new Point(10, 10);
+            Pic.Image = ResizeImage(AppIcon, Style.Scale(170), Style.Scale(170));
+            Pic.Location = new Point(Style.Scale(10), Style.Scale(10));
             Pic.AutoSize = true;
 
-            LoadingPanel ProgressBG = new LoadingPanel(ProgressBarWidth, 32, new Point(220,100));
+            LoadingPanel ProgressBG = new LoadingPanel(ProgressBarWidth, Style.Scale(32), new Point(Style.Scale(220),Style.Scale(100)));
 
             Progress = new Label();
             Progress.Text = "Loading...";
@@ -79,10 +79,10 @@ namespace GDSharp {
             ProgressBar.BackColor = Style.Color(Style.Colors.Main);
             ProgressBar.Height = ProgressBarHeight;
             ProgressBar.Width = ProgressBarWidth;
-            ProgressBar.Location = new Point(220, 132);
+            ProgressBar.Location = new Point(Style.Scale(220), Style.Scale(132));
 
             Label Title = new Label();
-            Title.Location = new Point(220, 16);
+            Title.Location = new Point(Style.Scale(220), Style.Scale(16));
             Title.Text = Settings.AppName;
             Title.Font = Style.GetHeaderFont(50);
             Title.AutoSize = true;
@@ -93,10 +93,10 @@ namespace GDSharp {
             Subtitle.AutoSize = true;
             Subtitle.ForeColor = Style.Color(Style.Colors.Text);
             Subtitle.Font = Style.GetFont(8);
-            Subtitle.Location = new Point(220, 149);
+            Subtitle.Location = new Point(Style.Scale(220), Style.Scale(149));
 
-            Width = 570;
-            Height = 200;
+            Width = Style.Scale(570);
+            Height = Style.Scale(200);
 
             MinimumSize = Size;
             MaximumSize = Size;

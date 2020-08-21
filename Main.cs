@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace GDSharp {
     public partial class Main : Form {
@@ -32,6 +33,8 @@ namespace GDSharp {
             public int ID { get; set; }
             public string Text { get; set; }
         }
+
+        public dynamic TabList = new {};
 
         private Panel Tabs;
         private Panel Pages;
@@ -72,13 +75,27 @@ namespace GDSharp {
             ScrollBar = new VScrollBar();
             ScrollBar.Location = new Point(Dimensions.Width - ScrollBar.Width, 0);
 
+            /*
             foreach (var i in new List<Panel> {
                 new Pages.Home(),
                 new Pages.Backups(),
                 new Pages.Export(),
                 new Pages.Import(),
                 new Pages.Settings()
-            }) {
+            })
+            */
+
+            TabList = new {
+                Home = new Pages.Home(),
+                Backups = new Pages.Backups(),
+                Export = new Pages.Export(),
+                Import = new Pages.Import(),
+                Settings = new Pages.Settings()
+            };
+
+            foreach (PropertyInfo pi in TabList.GetType().GetProperties()) {
+                Panel i = pi.GetValue(TabList);
+
                 var Tab = new Elements.Tab();
                 Tab.Text = i.Name;
                 int offset = 0;
@@ -154,7 +171,7 @@ namespace GDSharp {
         void DropFile(object sender, DragEventArgs e) {
             string[] s = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
             foreach (string i in s) {
-                Console.WriteLine(i);
+                TabList.Import.AddImport(i);
             }
             Overlay.SlideOverlay(false);
         }

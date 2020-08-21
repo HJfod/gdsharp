@@ -51,7 +51,14 @@ namespace GDSharp {
                 Level.Add(new Elements.NewLine());
                 Level.Add(new Elements.Text($"{Info}", c));
                 Level.Add(new Elements.NewLineBig());
-                Level.Add(new Elements.GButton(Style.Color(Style.Colors.Main), "Import"));
+
+                Elements.GButton ImportButton = new Elements.GButton(Style.Color(Style.Colors.Main), "Import");
+                ImportButton.Click += (object s, EventArgs e) => {
+                    string res = GDShare.ImportLevel(file);
+                    if (res != null) MessageBox.Show($"Error: {res}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); else Level.Dispose();
+                };
+
+                Level.Add(ImportButton);
 
                 ImportLeveLArea.Controls.Add(Level);
             }

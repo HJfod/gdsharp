@@ -113,6 +113,7 @@ namespace GDSharp {
                 }
             }
             string actualTypeMatch = Regex.Match(savedata, $"<k>{key}</k><{type}>", RegexOptions.None, Regex.InfiniteMatchTimeout).Value;
+            if (actualTypeMatch == "") return "";
             string actualType = actualTypeMatch.Substring(actualTypeMatch.LastIndexOf("<")+1, 1);
 
             string matcher = $"<k>{key}</k><{actualType}>.*?</{actualType}>";
