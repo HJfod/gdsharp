@@ -10,20 +10,21 @@ namespace GDSharp {
                 public int Index { get; set; }
             }
 
-            public Select() {
-                Width = Dimensions.Width - Style.PaddingSizeBig * 2;
-                Height = 200;
-                BackColor = Style.Color(Style.Colors.Light);
-                ForeColor = Style.Color(Style.Colors.Text);
-                Padding = Style.Padding;
-                Margin = Style.Padding;
-                BorderStyle = BorderStyle.None;
-                SelectionMode = SelectionMode.MultiSimple;
-                DisplayMember = "Text";
-                ValueMember = "Text";
-                DrawItem += DrawSelectItem;
-                ItemHeight = Style.GetFont().Height * 4;
-                Font = Style.GetFont();
+            public Select(ContextMenuStrip _Menu = null) {
+                this.Width = Dimensions.Width - Style.PaddingSizeBig * 2;
+                this.Height = 200;
+                this.BackColor = Style.Color(Style.Colors.Light);
+                this.ForeColor = Style.Color(Style.Colors.Text);
+                this.Padding = Style.Padding;
+                this.Margin = Style.Padding;
+                this.BorderStyle = BorderStyle.None;
+                this.SelectionMode = SelectionMode.MultiSimple;
+                this.DisplayMember = "Text";
+                this.ValueMember = "Text";
+                this.DrawItem += DrawSelectItem;
+                this.ItemHeight = Style.GetFont().Height * 4;
+                this.Font = Style.GetFont();
+                this.ContextMenuStrip = _Menu;
             }
 
             protected override void OnPaint(PaintEventArgs e) {

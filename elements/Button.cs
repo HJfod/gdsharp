@@ -30,21 +30,27 @@ namespace GDSharp {
                 return 0F;
             }
 
-            public GButton(Color? _BG = null, string _Text = null) {
-                this.AutoSize = true;
+            public GButton(Color? _BG = null, string _Text = null, bool _Wide = false) {
                 this.Font = Style.GetFont();
+                if (_Text != null) this.Text = _Text;
+
                 this.ForeColor = Style.Color(Style.Colors.Text);
                 this.BackColor = Color.FromArgb(0,0,0,0);
                 this.FlatStyle = FlatStyle.Flat;
                 this.FlatAppearance.BorderSize = 0;
-                this.Padding = Style.ButtonPadding;
                 this.MouseEnter += this.HoverIn;
                 this.MouseLeave += this.HoverOut;
                 this.TabStop = false;
 
-                this.BGColor = _BG is Color ? (Color) _BG : Style.Color(Style.Colors.Dark);
+                this.Padding = Style.ButtonPadding;
+                if (_Wide) {
+                    this.Height = (Style.ButtonPadding.Top + Style.ButtonPadding.Bottom) * 2 + this.Font.Height;
+                    this.Width = Dimensions.Width - (Style.ButtonPadding.Left + Style.ButtonPadding.Right);
+                } else {
+                    this.AutoSize = true;
+                }
 
-                if (_Text != null) this.Text = _Text;
+                this.BGColor = _BG is Color ? (Color) _BG : Style.Color(Style.Colors.Dark);
 
                 this.hoverTimer = new Timer();
                 this.hoverTimer.Interval = Style.TimerFPS;

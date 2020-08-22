@@ -17,8 +17,7 @@ namespace GDSharp {
 
                 Elements.Container C = new Elements.Container();
 
-                var ImportButton = new Elements.GButton();
-                ImportButton.Text = "Import";
+                var ImportButton = new Elements.GButton(null, "Click to Import Level(s)", true);
                 ImportButton.Click += new EventHandler(OnClick);
 
                 ImportLeveLArea = new Elements.Div();
@@ -58,7 +57,11 @@ namespace GDSharp {
                     if (res != null) MessageBox.Show($"Error: {res}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); else Level.Dispose();
                 };
 
+                Elements.GButton CloseButton = new Elements.GButton(Style.Color(Style.Colors.Main), "Close");
+                CloseButton.Click += (object s, EventArgs e) => Level.Dispose();
+
                 Level.Add(ImportButton);
+                Level.Add(CloseButton);
 
                 ImportLeveLArea.Controls.Add(Level);
             }

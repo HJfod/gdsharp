@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace GDSharp {
     namespace Pages {
@@ -23,7 +24,11 @@ namespace GDSharp {
                 button.Text = "Export";
                 button.Click += new EventHandler(ExportLevel);
 
-                selectLevel = new Elements.Select();
+                ContextMenuStrip CM = new ContextMenuStrip();
+                CM.Items.Add(new ToolStripMenuItem("View &selected info", null, ViewInfo ));
+                CM.Items.Add(new ToolStripMenuItem("Export selected", null, ExportLevel ));
+
+                selectLevel = new Elements.Select(CM);
 
                 Program.BootupSplash.Progress.Text = "Loading levels...";
 
@@ -34,6 +39,26 @@ namespace GDSharp {
                 C.Controls.Add(selectLevel);
                 C.Controls.Add(button);
                 Controls.Add(C);
+            }
+
+            private void ViewInfo(object sender, EventArgs e) {
+                try {
+                    if (selectLevel.SelectedItems.Count > 0) {
+                        Elements.Select.SelectItem lvl = (Elements.Select.SelectItem)selectLevel.SelectedItems[0];
+                        dynamic LevelInfo = GDShare.GetLevelInfo(lvl.Text);
+                        
+                        string Info = "";
+
+                        foreach (PropertyInfo i in LevelInfo.GetType().GetProperties()) {
+                            if (i.Name != "Name" && i.Name != "Creator" && i.Name != "Description")
+                                Info += $"{i.Name.Replace("_", " ")}: {i.GetValue(LevelInfo)}\n";
+                        }
+
+                        MessageBox.Show(Info, $"Info for {lvl.Text}", MessageBoxButtons.OK, MessageBoxIcon.None);
+                    }
+                } catch(Exception err) {
+                    MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             private void ExportLevel(object sender, EventArgs e) {

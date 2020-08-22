@@ -103,9 +103,8 @@ namespace GDSharp {
                     offset += p.Size.Width + Style.Margin;
                 }
                 if (offset == 0) Tab.Selected = true;
-                Tab.Click += TabSelect;
-                Tab.Click += (Object sender, EventArgs e) => Tab.Selected = true;
-                Tab.Click += (Object sender, EventArgs e) => i.Show();
+                Tab.Name = i.Name;
+                Tab.Click += (object sender, EventArgs e) => SelectTab(i.Name);
                 Tab.Location = new Point(offset, 0);
                 Tabs.Controls.Add(Tab);
                 Pages.Controls.Add(i);
@@ -146,13 +145,15 @@ namespace GDSharp {
             //ScrollBar.Scroll += (sender, e) => { this.VerticalScroll.Value = ScrollBar.Value; };
         }
         
-        void TabSelect(Object sender, EventArgs e) {
-            foreach (Elements.Tab p in Tabs.Controls) {
-                p.Selected = false;
-            }
+        public void SelectTab(string tab) {
             foreach (Control p in Pages.Controls) {
                 if (p is Pages.Tab) {
-                    p.Hide();
+                    if (p.Name == tab) p.Show(); else p.Hide();
+                }
+            }
+            foreach (Elements.Tab p in Tabs.Controls) {
+                if (p is Elements.Tab) {
+                    p.Selected = p.Name == tab ? true : false;
                 }
             }
         }
@@ -172,6 +173,7 @@ namespace GDSharp {
             string[] s = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
             foreach (string i in s) {
                 TabList.Import.AddImport(i);
+                SelectTab("Import");
             }
             Overlay.SlideOverlay(false);
         }
