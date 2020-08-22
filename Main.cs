@@ -110,6 +110,12 @@ namespace GDSharp {
                 Pages.Controls.Add(i);
             }
 
+            ContextMenuStrip CM = new ContextMenuStrip();
+            CM.Items.Add(new ToolStripMenuItem("Help", null, (object s, EventArgs e) => MessageBox.Show("help dialog") ));
+            CM.Items.Add(new ToolStripMenuItem("Quit (Alt+F4)", null, (object s, EventArgs e) => this.Close() ));
+
+            ContextMenuStrip = CM;
+
             Icon = new Icon("resources/icon.ico");
 
             MainPanel.Size = new Size(Dimensions.Width, Dimensions.Height);

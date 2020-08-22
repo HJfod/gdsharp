@@ -43,7 +43,7 @@ namespace GDSharp {
                 );
 
                 string Txt = "Drop files to import!";
-                string SubTxt = "Supported level formats: .gmd, .lvl\n\nSupported backup formats: Directory, .gdb";
+                string SubTxt = $"Supported level formats: {GDShare.Ext.LevelList}\n\nSupported backup formats: Directory, .{GDShare.Ext.Backup}";
 
                 int SubOffset = 200;
 

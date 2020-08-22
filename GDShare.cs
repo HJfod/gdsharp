@@ -15,6 +15,15 @@ namespace GDSharp {
         private static string _LLSaveData;
         private static string _CCDirPath;
         private static List<dynamic> _LevelList;
+        private static string _BackupLocation;
+        public static class Ext {
+            public static string Level = "gmd";
+            public static string LevelAlt = "lvl";
+            public static string LevelCompressed = "gmdc";
+            public static string LevelZipped = "gmdz";
+            public static string Backup = "gdb";
+            public static string LevelList = $".{Level}, .{LevelAlt}, .{LevelCompressed}, .{LevelZipped}";
+        }
 
         private static string DecryptXOR(string str, int key) {
             byte[] xor = Encoding.UTF8.GetBytes(str);
@@ -202,6 +211,10 @@ namespace GDSharp {
 
             if (name.IndexOf("\\") > -1) {
                 lvl = new { Data = File.ReadAllText(name) };
+                Console.WriteLine(lvl.Data.Substring(0, 100));
+                if (!lvl.Data.StartsWith("<d>")) {
+                    lvl.Data = ConvertLvlToGmd(lvl.Data);
+                }
             } else {
                 foreach (dynamic x in _LevelList) {
                     if (x.Name == name) {
@@ -253,7 +266,7 @@ namespace GDSharp {
                 if (lvl == null) {
                     return $"Level {name} not found.";
                 } else {
-                    string output = $@"{path}\{name}.gmd";
+                    string output = $@"{path}\{name}.{Ext.Level}";
 
                     string NewData = Regex.Replace(lvl.Data, @"<k>k_\d+<\/k>", "");
 
@@ -266,11 +279,19 @@ namespace GDSharp {
             }
         }
 
+        public static string ConvertLvlToGmd(string lvl) {
+            lvl = DecompressZLib(Encoding.ASCII.GetBytes(lvl));
+            lvl = $"<d>{lvl}</d>";
+            return lvl;
+        }
+
         public static string ImportLevel(string path) {
             if (File.Exists(path)) {
                 try {
                     string lvl = File.ReadAllText(path);
                     string data = _LLSaveData;
+
+                    if (path.EndsWith(Ext.LevelAlt)) lvl = ConvertLvlToGmd(lvl);
                     
                     data = Regex.Replace(data, @"<k>k1<\/k><i>\d+?<\/i>", "");
                     string[] splitData = data.Split("<k>_isArr</k><t />");
@@ -287,6 +308,10 @@ namespace GDSharp {
             } else {
                 return "File doesn't exist!";
             }
+        }
+
+        public class Backups {
+
         }
     }
 }

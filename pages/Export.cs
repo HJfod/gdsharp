@@ -38,6 +38,7 @@ namespace GDSharp {
 
                 C.Controls.Add(selectLevel);
                 C.Controls.Add(button);
+                C.Controls.Add(new Elements.Text("Right-click level list for more options"));
                 Controls.Add(C);
             }
 

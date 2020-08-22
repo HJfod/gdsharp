@@ -31,6 +31,19 @@ namespace GDSharp {
             public void AddImport(string file) {
                 Elements.GDLevel Level = new Elements.GDLevel(file);
 
+                EventHandler ImportThis = (object s, EventArgs e) => {
+                    string res = GDShare.ImportLevel(file);
+                    if (res != null) MessageBox.Show($"Error: {res}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); else Level.Dispose();
+                };
+
+                EventHandler CloseThis = (object s, EventArgs e) => Level.Dispose();
+
+                ContextMenuStrip CM = new ContextMenuStrip();
+                CM.Items.Add(new ToolStripMenuItem("Import", null, ImportThis ));
+                CM.Items.Add(new ToolStripMenuItem("Close", null, CloseThis ));
+
+                Level.ContextMenuStrip = CM;
+
                 dynamic LevelInfo = GDShare.GetLevelInfo(file);
                 
                 string Info = "";
@@ -52,13 +65,10 @@ namespace GDSharp {
                 Level.Add(new Elements.NewLineBig());
 
                 Elements.GButton ImportButton = new Elements.GButton(Style.Color(Style.Colors.Main), "Import");
-                ImportButton.Click += (object s, EventArgs e) => {
-                    string res = GDShare.ImportLevel(file);
-                    if (res != null) MessageBox.Show($"Error: {res}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); else Level.Dispose();
-                };
+                ImportButton.Click += ImportThis;
 
                 Elements.GButton CloseButton = new Elements.GButton(Style.Color(Style.Colors.Main), "Close");
-                CloseButton.Click += (object s, EventArgs e) => Level.Dispose();
+                CloseButton.Click += CloseThis;
 
                 Level.Add(ImportButton);
                 Level.Add(CloseButton);
@@ -69,7 +79,7 @@ namespace GDSharp {
             private void OnClick(object sender, EventArgs e) {
                 using (OpenFileDialog ofd = new OpenFileDialog()) {
                     ofd.InitialDirectory = "c:\\";
-                    ofd.Filter = "Level files (*.lvl;*gmd)|*.lvl;*.gmd|All files (*.*)|*.*";
+                    ofd.Filter = $"Level files (*.{GDShare.Ext.LevelAlt};*.{GDShare.Ext.Level})|*.{GDShare.Ext.LevelAlt};*.{GDShare.Ext.Level}|All files (*.*)|*.*";
                     ofd.FilterIndex = 1;
                     ofd.RestoreDirectory = true;
                     ofd.Multiselect = true;
